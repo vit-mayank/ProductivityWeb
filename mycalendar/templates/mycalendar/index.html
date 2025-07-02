@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}My Calendar{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center mb-4">
+        <div class="text-center">
+            <h2 class="mb-3">
+                <i class="bi bi-calendar3 me-2"></i>My Calendar
+            </h2>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="card shadow-sm border-0" style="width: 100%">
+            <div class="card-body p-0">
+                <form id="prev" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="year" value="{{ year }}">
+                    <input type="hidden" name="month" value="{{ month }}">
+                    <input type="hidden" name="action" value="-">
+                </form>
+                <form id="next" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="year" value="{{ year }}">
+                    <input type="hidden" name="month" value="{{ month }}">
+                    <input type="hidden" name="action" value="+">
+                </form>
+                {{ cal|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Calendar container */
+    .month {
+        width: 100%;
+        margin: 0 auto;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 8px;
+    }
+    
+    /* Header row */
+    .month thead tr {
+        background-color: transparent !important;
+    }
+    
+    /* Day names header */
+    .month th {
+        background-color: #2b3035;
+        color: #f8f9fa;
+        padding: 12px 0;
+        font-weight: 500;
+        font-size: 1rem;
+        border: none !important;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    /* Month header with buttons */
+    .month th.month {
+        position: relative;
+        padding: 15px 0 15px 0 !important; /* Extra padding at top for buttons */
+    }
+    
+    .month-header-content {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+    
+    .month-nav-buttons {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    
+    .add-event-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
+    
+    /* Calendar cells */
+    .month td {
+        height: 120px;
+        vertical-align: top;
+        padding: 8px;
+        background-color: #2b3035;
+        border: none !important;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+    
+    /* Cell hover effect */
+    .month td:hover {
+        background-color: #3a4047;
+        transform: translateY(-2px);
+    }
+    
+    /* Date number */
+    .month .day {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #f8f9fa;
+        text-align: center;
+    }
+    
+    /* Events in cells */
+    .month td a {
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
+    }
+    
+    .month td a div {
+        font-size: 0.85rem;
+        margin: 4px 0;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: black !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 90%;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    
+    /* Event hover effect */
+    .month td a:hover div {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+    
+    /* Today's cell */
+    #today {
+        background-color: #5a6268;
+        box-shadow: 0 0 0 2px #6c757d;
+    }
+    
+    /* Days from other months */
+    .other-month {
+        opacity: 0.5;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .month {
+            width: 100%;
+            border-spacing: 4px;
+        }
+        
+        .month td {
+            height: 80px;
+            padding: 4px;
+        }
+        
+        .month th {
+            padding: 50px 0 8px 0 !important;
+            font-size: 0.9rem;
+        }
+        
+        .month .day {
+            font-size: 0.9rem;
+        }
+        
+        .month td a div {
+            font-size: 0.7rem;
+            padding: 2px 4px;
+        }
+        
+        .month-nav-buttons {
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .add-event-btn {
+            position: static;
+            margin-top: 5px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight today's date
+        const todayCell = document.getElementById("today");
+        if (todayCell) {
+            todayCell.style.backgroundColor = "#5a6268";
+            todayCell.style.boxShadow = "0 0 0 2px #6c757d";
+        }
+        
+        // Center all day numbers
+        const dayNumbers = document.querySelectorAll('.day');
+        dayNumbers.forEach(day => {
+            day.style.textAlign = 'center';
+            day.style.display = 'block';
+        });
+    });
+</script>
+{% endblock %}

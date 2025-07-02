@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Account Login{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h3 class="text-center my-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Welcome Back
+                    </h3>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.username.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-person-badge me-2"></i>Username or Email
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg {% if form.username.errors %}is-invalid{% endif %}" 
+                                   id="{{ form.username.id_for_label }}" 
+                                   name="{{ form.username.name }}"
+                                   required>
+                            {% for error in form.username.errors %}
+                            <div class="invalid-feedback">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.password.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-shield-lock-fill me-2"></i>Password
+                            </label>
+                            <input type="password" 
+                                   class="form-control form-control-lg {% if form.password.errors %}is-invalid{% endif %}" 
+                                   id="{{ form.password.id_for_label }}" 
+                                   name="{{ form.password.name }}"
+                                   required>
+                            {% for error in form.password.errors %}
+                            <div class="invalid-feedback">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{ error }}
+                            </div>
+                            {% endfor %}
+                            <div class="text-end mt-2">
+                                <a href="#" class="text-decoration-none small">Forgot password?</a>
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="rememberCheck">
+                            <label class="form-check-label small" for="rememberCheck">
+                                Remember me
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid mb-3">
+                            <button class="btn btn-primary btn-lg py-3 fw-bold" type="submit">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                            </button>
+                        </div>
+                        
+                        <div class="text-center pt-3 border-top">
+                            <p class="small mb-0">New to our platform? 
+                                <a href="{% url 'register' %}" class="text-decoration-none fw-bold">Create an account</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #e2e8f0;
+    }
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .btn-primary {
+        background-color: #4f46e5;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #4338ca;
+        transform: translateY(-1px);
+    }
+    .invalid-feedback {
+        display: block;
+    }
+    .alert-danger {
+        border-left: 4px solid #dc3545;
+    }
+</style>
+
+<script>
+    // Enable Bootstrap form validation
+    (function() {
+        'use strict'
+        
+        const forms = document.querySelectorAll('.needs-validation')
+        
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
